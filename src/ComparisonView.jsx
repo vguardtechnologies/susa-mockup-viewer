@@ -181,25 +181,33 @@ export default function ComparisonView() {
       </div>
 
       {/* Grid Layout */}
-      <div className={`${isMobile ? 'h-[calc(100vh-5rem)]' : 'h-[calc(100vh-7rem)]'} grid ${getGridCols()} gap-1 p-1 bg-neutral-200 overflow-hidden`}>
-        {displayedVersions.map(({ id, name, component: Component, color, desc }) => (
-          <div key={id} className="bg-white rounded-lg overflow-hidden shadow-xl flex flex-col">
-            {!isMobile && (
+      {isMobile ? (
+        // Mobile: Full-screen mockup view (like a real app)
+        <div className="h-[calc(100vh-5rem)] overflow-auto bg-white">
+          {displayedVersions.map(({ id, component: Component }) => (
+            <Component key={id} />
+          ))}
+        </div>
+      ) : (
+        // Desktop: Comparison grid view
+        <div className={`h-[calc(100vh-7rem)] grid ${getGridCols()} gap-1 p-1 bg-neutral-200 overflow-hidden`}>
+          {displayedVersions.map(({ id, name, component: Component, color, desc }) => (
+            <div key={id} className="bg-white rounded-lg overflow-hidden shadow-xl flex flex-col">
               <div className={`bg-gradient-to-r ${color} text-white px-3 py-2 text-center`}>
                 <h2 className="font-bold text-xs uppercase tracking-wider">{name}</h2>
                 <p className="text-[9px] opacity-90 mt-0.5">{desc}</p>
               </div>
-            )}
-            <div className="flex-1 overflow-hidden relative bg-neutral-50">
-              <div className="absolute inset-0 flex items-start justify-center">
-                <div style={{ transform: `scale(${getScale()})`, transformOrigin: 'top center', width: '448px', height: '100vh' }}>
-                  <Component />
+              <div className="flex-1 overflow-hidden relative bg-neutral-50">
+                <div className="absolute inset-0 flex items-start justify-center">
+                  <div style={{ transform: `scale(${getScale()})`, transformOrigin: 'top center', width: '448px', height: '100vh' }}>
+                    <Component />
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
 
       {/* Legend - Hidden on mobile */}
       {!isMobile && (
